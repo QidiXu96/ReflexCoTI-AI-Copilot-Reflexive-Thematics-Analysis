@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.reflexcoti.web</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/xuqidi/Documents/ReflexCoTI Web Design/.venv/bin/python</string>
+    <string>-u</string>
+    <string>/Users/xuqidi/Documents/ReflexCoTI Web Design/server.py</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/xuqidi/Documents/ReflexCoTI Web Design</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>MPLCONFIGDIR</key>
+    <string>/private/tmp/reflexcoti_mpl</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/xuqidi/Documents/ReflexCoTI Web Design/server_data/launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/xuqidi/Documents/ReflexCoTI Web Design/server_data/launchd.log</string>
+</dict>
+</plist>

@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReflexCoTI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261014-1" />
+  </head>
+  <body>
+    <section class="auth-shell" data-view="login">
+      <div class="brand-panel">
+        <div class="brand-mark">R</div>
+        <p class="eyebrow">Reflexive coding support</p>
+        <h1>ReflexCoTI</h1>
+        <p class="lead">A workspace for reflexive thematic analysis in Alzheimer's disease or related dementias.</p>
+        <div class="feature-grid">
+          <div>
+            <strong>AI suggestions</strong>
+            <span>Identify codes & excerpts and generate themes from transcripts.</span>
+          </div>
+          <div>
+            <strong>Human control</strong>
+            <span>Accept, revise, reject, merge or add codes; themes can also be split.</span>
+          </div>
+          <div>
+            <strong>Reflexive thinking</strong>
+            <span>Coder agent's identify profile and reflexive thinking.</span>
+          </div>
+        </div>
+      </div>
+
+      <form class="auth-card wide" id="sessionForm">
+        <p class="step-pill">Sign in</p>
+        <h2>Welcome to ReflexCoTI</h2>
+        <p class="muted">Enter your username and Azure OpenAI details. You will set up your study on the next page.</p>
+        <label>
+          Username
+          <input id="username" autocomplete="username" placeholder="e.g. AdaXu" required />
+        </label>
+        <label>
+          Password
+          <input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required />
+        </label>
+        <div class="form-grid">
+          <label>
+            Azure endpoint
+            <input id="azureEndpoint" placeholder="https://your-resource.openai.azure.com" required />
+          </label>
+          <label>
+            API key
+            <input id="apiKey" type="password" placeholder="Paste your API key" required />
+          </label>
+          <label>
+            API version
+            <input id="apiVersion" placeholder="e.g. 2024-08-01-preview" required />
+          </label>
+          <label>
+            Model deployment
+            <input id="model" placeholder="e.g. gpt-4o-mini" required />
+          </label>
+        </div>
+        <div class="button-row">
+          <button class="secondary-btn" id="registerBtn" type="button">Create account</button>
+          <button class="primary-btn" type="submit">Sign in</button>
+        </div>
+      </form>
+    </section>
+
+    <div class="export-modal hidden" id="accountTypeModal" role="dialog" aria-modal="true" aria-labelledby="accountTypeTitle">
+      <form class="export-card project-create-card account-type-card" id="accountTypeForm">
+        <button class="guidebook-close" id="closeAccountType" type="button" aria-label="Close role selection">&times;</button>
+        <p class="step-pill">Create account</p>
+        <h2 id="accountTypeTitle">Choose your role</h2>
+        <p class="muted">Your role determines which workspace opens after you sign in.</p>
+        <label>
+          Your role
+          <select id="accountRole" required>
+            <option value="">Select Junior or Senior researcher</option>
+            <option value="student">Junior researcher</option>
+            <option value="pi">Senior researcher</option>
+          </select>
+        </label>
+        <div class="project-modal-actions"><button class="secondary-btn" id="cancelAccountType" type="button">Cancel</button><button class="primary-btn" id="confirmCreateAccount" type="submit">Create account</button></div>
+      </form>
+    </div>
+
+    <section class="project-setup pi-home hidden" data-view="pi-home">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <strong class="page-context">Senior researcher workspace</strong>
+        <div class="account-actions"><div class="avatar pi-user-avatar">U</div><button class="text-btn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="pi-home-main">
+        <div class="pi-home-heading">
+          <p class="eyebrow">Senior researcher</p>
+          <h1>What would you like to work on?</h1>
+          <p>Continue your own analysis or review research work shared by junior researchers.</p>
+        </div>
+        <div class="pi-choice-grid">
+          <button class="pi-choice-card own-projects" id="openPiProjects" type="button">
+            <span class="pi-choice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H10l2 2h5.5A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><path d="M8 11h8M8 14h5"/></svg>
+            </span>
+            <span class="pi-choice-copy"><strong>My Projects</strong><span>Create projects and conduct coding or theme analysis.</span></span>
+            <span class="pi-choice-arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="pi-choice-card student-projects" id="openStudentProjects" type="button">
+            <span class="pi-choice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 8.5a2.5 2.5 0 1 1 1.2 4.65M17 15a4 4 0 0 1 3.5 4"/></svg>
+            </span>
+            <span class="pi-choice-copy"><strong>Junior Researcher Projects</strong><span>View coding and theme analyses shared by junior researchers.</span></span>
+            <span class="pi-choice-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </main>
+    </section>
+
+    <section class="project-setup hidden" data-view="pi-students">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backToPiHomeFromStudents" type="button">← Senior researcher workspace</button>
+        <div class="account-actions"><div class="avatar pi-user-avatar">U</div><button class="text-btn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="library-main">
+        <div class="library-toolbar">
+          <div><h1 id="piStudentPageTitle">Junior Researcher Projects</h1><p id="piStudentPageSubtitle">Review coding and theme analyses shared with you</p></div>
+          <button class="primary-btn" id="openInviteStudent" type="button">Invite junior researcher</button>
+        </div>
+        <div id="piStudentConnections" aria-live="polite"></div>
+      </main>
+    </section>
+
+    <div class="export-modal hidden" id="inviteStudentModal" role="dialog" aria-modal="true" aria-labelledby="inviteStudentTitle">
+      <form class="export-card project-create-card invite-student-card" id="inviteStudentForm">
+        <button class="guidebook-close" id="closeInviteStudent" type="button" aria-label="Close invitation form">&times;</button>
+        <p class="step-pill">Senior review access</p>
+        <h2 id="inviteStudentTitle">Invite a junior researcher</h2>
+        <p class="muted">Enter the junior researcher’s exact ReflexCoTI username. You can review or modify their exported work only after they accept.</p>
+        <label>Junior researcher username<input id="inviteStudentUsername" autocomplete="off" placeholder="e.g. AdaXu" required /></label>
+        <div class="project-modal-actions"><button class="secondary-btn" id="cancelInviteStudent" type="button">Cancel</button><button class="primary-btn" id="sendStudentInvitation" type="submit">Send invitation</button></div>
+      </form>
+    </div>
+
+    <section class="project-setup hidden" data-view="project">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <strong class="page-context" id="projectPageContext">Projects</strong>
+        <button class="breadcrumb-btn hidden" id="backToPiHome" type="button">← Senior researcher workspace</button>
+        <div class="account-actions"><div class="avatar" id="setupUserAvatar">U</div><button class="text-btn" id="logoutBtn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="library-main">
+        <section class="student-pi-panel hidden" id="studentPiPanel" aria-labelledby="studentPiPanelTitle">
+          <div class="student-pi-panel-heading"><div><p class="eyebrow">Review access</p><h2 id="studentPiPanelTitle">Pending review requests</h2></div></div>
+          <div id="studentPiConnections" aria-live="polite"></div>
+        </section>
+        <div class="peer-suggestion-notice hidden" id="peerSuggestionNotice" role="status"></div>
+        <div class="library-toolbar">
+          <div><h1>Projects</h1><p>Your saved research workspaces</p></div>
+          <div class="library-actions"><button class="secondary-btn" id="openPeerReview" type="button">Peer review</button><button class="secondary-btn peer-inbox-btn" id="openPeerInbox" type="button">Suggestions <span id="peerSuggestionCount">0</span></button><input id="projectSearch" type="search" placeholder="Search projects" /><button class="primary-btn" id="openCreateProject" type="button">+ Add project</button></div>
+        </div>
+        <div class="project-card-grid" id="projectCardGrid"><article class="library-empty"><strong>No projects yet</strong><p>Create your first research project to begin.</p></article></div>
+      </main>
+    </section>
+
+    <section class="project-setup hidden" data-view="peer-review">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backFromPeerReview" type="button">← My projects</button>
+        <div class="account-actions"><div class="avatar peer-user-avatar">U</div><button class="text-btn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="pi-review-main peer-review-main">
+        <div class="pi-review-heading">
+          <div><p class="eyebrow" id="peerReviewEyebrow">Junior researcher peer review</p><h1 id="peerReviewTitle">Peer review</h1><p id="peerReviewSubtitle">Request access or open results that another junior researcher has approved for you to review.</p></div>
+          <div class="pi-review-heading-actions"><button class="secondary-btn hidden" id="backToPeerAccess" type="button">← Peer review access</button><span class="readonly-badge pi-review-badge">Suggestions only · no export</span></div>
+        </div>
+        <form class="peer-review-lookup" id="peerReviewRequestForm">
+          <label for="peerReviewRequestUsername">Request peer review</label>
+          <div class="peer-review-lookup-controls"><input id="peerReviewRequestUsername" autocomplete="off" placeholder="Enter exact junior researcher username" required /><button class="primary-btn" id="sendPeerReviewRequest" type="submit">Send request</button></div>
+          <p>Their exported results remain private until they accept your request.</p>
+        </form>
+        <div class="peer-review-toolbar hidden" id="peerReviewToolbar"><span id="peerSelectionStatus">Select results to merge.</span><button class="secondary-btn" id="suggestPeerMerge" type="button" disabled>Suggest merge</button></div>
+        <div id="peerReviewContent" aria-live="polite"><article class="library-empty peer-review-prompt"><strong>No approved peer access yet</strong><p>Send a request above. Once accepted, the researcher will appear here with a Review results action.</p></article></div>
+      </main>
+    </section>
+
+    <div class="export-modal hidden" id="peerSuggestionModal" role="dialog" aria-modal="true" aria-labelledby="peerSuggestionDialogTitle" aria-describedby="peerSuggestionDialogDescription">
+      <form class="export-card peer-suggestion-dialog" id="peerSuggestionForm">
+        <button class="guidebook-close" id="closePeerSuggestion" type="button" aria-label="Close peer suggestion form">&times;</button>
+        <p class="step-pill">Peer review suggestion</p>
+        <h2 id="peerSuggestionDialogTitle">Suggest a revision</h2>
+        <p class="muted" id="peerSuggestionDialogDescription">The owner will decide whether to apply your suggestion.</p>
+        <div class="peer-suggestion-target" id="peerSuggestionTarget"></div>
+        <div class="peer-suggestion-revision-fields" id="peerSuggestionRevisionFields">
+          <label><span id="peerSuggestionTitleLabel">Proposed name</span><input id="peerSuggestionTitle" /></label>
+          <label id="peerSuggestionDetailField"><span id="peerSuggestionDetailLabel">Proposed supporting content</span><textarea class="setup-textarea" id="peerSuggestionDetail"></textarea></label>
+        </div>
+        <label>Why are you suggesting this change?<textarea class="setup-textarea peer-suggestion-memo-input" id="peerSuggestionMemo" placeholder="Explain what should change and why" required></textarea></label>
+        <div class="project-modal-actions"><button class="secondary-btn" id="cancelPeerSuggestion" type="button">Cancel</button><button class="primary-btn" id="sendPeerSuggestion" type="submit">Send suggestion</button></div>
+      </form>
+    </div>
+
+    <section class="project-setup hidden" data-view="peer-inbox">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backFromPeerInbox" type="button">← My projects</button>
+        <div class="account-actions"><div class="avatar peer-user-avatar">U</div><button class="text-btn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="pi-review-main peer-review-main">
+        <div class="pi-review-heading">
+          <div><p class="eyebrow">Suggestion inbox</p><h1>Review suggestions to your work</h1><p>Agree to apply a proposal or disagree to leave your result unchanged. Resolve every pending suggestion before finishing a new revision.</p></div>
+        </div>
+        <div id="peerInboxContent" aria-live="polite"></div>
+      </main>
+    </section>
+
+    <section class="project-setup hidden" data-view="pi-project-review">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backToPiStudentProjects" type="button">← Junior researcher projects</button>
+        <div class="account-actions"><div class="avatar pi-user-avatar">U</div><button class="text-btn" type="button" data-logout>Sign out</button></div>
+      </header>
+      <main class="pi-review-main">
+        <div class="pi-review-heading">
+          <div><p class="eyebrow">Senior project review</p><h1 id="piReviewProjectName">Junior researcher project</h1><p id="piReviewProjectQuestion"></p></div>
+          <span class="readonly-badge pi-review-badge">Completed codes editable</span>
+        </div>
+        <div class="pi-review-summary" aria-label="Project analysis summary">
+          <div><strong id="piReviewTranscriptCount">0</strong><span>Transcripts</span></div>
+          <div><strong id="piReviewCodeCount">0</strong><span>Codes</span></div>
+          <div><strong id="piReviewExcerptCount">0</strong><span>Excerpts</span></div>
+          <div><strong id="piReviewThemeCount">0</strong><span>Themes</span></div>
+        </div>
+        <section class="pi-review-section">
+          <div class="pi-review-section-heading"><div><h2>Transcript coding analyses</h2><p>Select a transcript to inspect its reviewed codes and excerpts.</p></div></div>
+          <div class="document-table-wrap"><table class="document-table"><thead><tr><th>Transcript</th><th>Codes</th><th>Excerpts</th><th>Status</th><th><span class="sr-only">Action</span></th></tr></thead><tbody id="piReviewTranscriptBody"></tbody></table></div>
+        </section>
+        <section class="pi-review-section pi-theme-review-row">
+          <div><h2>Project theme analysis</h2><p id="piReviewThemeStatus">No theme analysis has been saved.</p></div>
+          <button class="secondary-btn" id="viewPiThemeAnalysis" type="button">View themes</button>
+        </section>
+        <section class="pi-analysis-detail hidden" id="piAnalysisDetail" aria-live="polite">
+          <div class="pi-analysis-detail-heading"><div><p class="eyebrow" id="piAnalysisDetailType">Coding analysis</p><h2 id="piAnalysisDetailTitle">Analysis</h2></div><button class="text-btn" id="closePiAnalysisDetail" type="button">Close</button></div>
+          <div id="piAnalysisDetailContent"></div>
+        </section>
+      </main>
+    </section>
+
+    <section class="project-setup hidden" data-view="documents">
+      <header class="setup-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backToProjects" type="button">← Projects</button>
+        <div class="account-actions"><span class="readonly-session-badge hidden" id="piReadOnlyDocumentsBadge">Senior researcher read-only view</span><div class="avatar document-user-avatar">U</div></div>
+      </header>
+      <main class="document-manager-main">
+        <div class="document-manager-heading">
+          <div><p class="eyebrow">Project</p><h1 id="documentProjectName">Project transcripts</h1><p id="documentProjectQuestion"></p></div>
+          <div class="document-manager-actions"><input id="transcriptSearchManager" type="search" placeholder="Search transcripts" /><label class="primary-btn manager-upload" for="managerTranscriptFiles">+ Add transcripts<input id="managerTranscriptFiles" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple /></label></div>
+        </div>
+        <div class="selection-toolbar"><span id="managerSelectionStatus">Choose AI Codes or optional Human Codes for one transcript, or use all project transcripts for Themes.</span><div class="selection-toolbar-actions"><button class="secondary-btn" id="openCodebookViewBtn" type="button" disabled>▦ Codebook View</button><button class="secondary-btn" id="openThemeViewBtn" type="button" disabled>◉ Theme View</button><button class="primary-btn" id="openSelectionBtn" type="button" disabled>Open Themes with all transcripts</button></div></div>
+        <div class="document-table-wrap">
+          <table class="document-table">
+            <thead><tr><th>Transcript</th><th>Codes</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="documentTableBody"><tr><td colspan="4" class="table-empty">No transcripts uploaded yet.</td></tr></tbody>
+          </table>
+        </div>
+      </main>
+    </section>
+
+    <section class="code-visualization hidden" data-view="code-visualization">
+      <header class="setup-topbar code-view-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backFromCodeView" type="button">← Transcripts</button>
+        <div class="avatar code-view-user-avatar">U</div>
+      </header>
+      <main class="code-view-main">
+        <div class="code-view-heading">
+          <div><p class="eyebrow">Code view</p><h1 id="codeViewTranscriptName">Transcript codes</h1><p id="codeViewProjectName">Explore the coding landscape at a glance.</p></div>
+          <div class="code-view-controls"><label class="code-view-search"><span class="sr-only">Search codes</span><input id="codeViewSearch" type="search" placeholder="Search code names" /></label><button class="secondary-btn" id="openDetailedCodes" type="button">Open detailed codes ↗</button></div>
+        </div>
+        <section class="code-view-summary" aria-label="Code view summary">
+          <div><strong id="codeViewCodeCount">0</strong><span>codes</span></div>
+          <div><strong id="codeViewExcerptCount">0</strong><span>excerpts</span></div>
+          <p><span class="code-view-size-key" aria-hidden="true"></span>Position reflects semantic similarity; each compact card shows its excerpt count. Select <strong>+</strong> for details.</p>
+        </section>
+        <section class="code-constellation-shell">
+          <div class="code-constellation-header"><div><span class="constellation-spark" aria-hidden="true">✦</span><strong>Code constellation</strong></div><span id="codeViewVisibleStatus">Showing all codes</span></div>
+          <div class="code-constellation" id="codeConstellation" aria-live="polite"></div>
+        </section>
+      </main>
+    </section>
+
+    <section class="code-visualization hidden" data-view="theme-visualization">
+      <header class="setup-topbar code-view-topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home"><span class="brand-mark small">R</span><strong>ReflexCoTI</strong></button>
+        <button class="breadcrumb-btn" id="backFromThemeView" type="button">← Transcripts</button>
+        <div class="avatar code-view-user-avatar">U</div>
+      </header>
+      <main class="code-view-main">
+        <div class="code-view-heading">
+          <div><p class="eyebrow">Theme view</p><h1>Project themes</h1><p id="themeViewProjectName">Explore the thematic landscape at a glance.</p></div>
+          <div class="code-view-controls"><div class="theme-view-switch" role="group" aria-label="Theme visualization"><button class="active" id="showThemeMap" type="button" aria-pressed="true">Theme map</button><button id="showThemeWordCloud" type="button" aria-pressed="false">Code word cloud</button></div><label class="code-view-search"><span class="sr-only">Search themes or codes</span><input id="themeViewSearch" type="search" placeholder="Search theme names" /></label><button class="secondary-btn" id="openDetailedThemes" type="button">Open detailed themes ↗</button></div>
+        </div>
+        <section class="code-view-summary" aria-label="Theme view summary">
+          <div><strong id="themeViewThemeCount">0</strong><span>themes</span></div>
+          <div><strong id="themeViewCodeCount">0</strong><span>codes</span></div>
+          <p id="themeViewSizeHint"><span class="code-view-size-key" aria-hidden="true"></span>Position reflects thematic similarity; each compact card shows its code and transcript counts. Select <strong>+</strong> for details.</p>
+        </section>
+        <section class="code-constellation-shell theme-constellation-shell">
+          <div class="code-constellation-header"><div><span class="constellation-spark" aria-hidden="true">✦</span><strong>Theme constellation</strong></div><span id="themeViewVisibleStatus">Showing all themes</span></div>
+          <div class="code-constellation theme-constellation" id="themeConstellation" aria-live="polite"></div>
+        </section>
+        <section class="code-constellation-shell theme-word-cloud-shell hidden" id="themeWordCloudShell">
+          <div class="code-constellation-header"><div><span class="constellation-spark" aria-hidden="true">✦</span><strong>Code word cloud</strong></div><span id="themeWordCloudStatus">Terms sized by frequency</span></div>
+          <div class="theme-word-cloud" id="themeWordCloud" aria-live="polite"></div>
+        </section>
+      </main>
+    </section>
+
+    <div class="export-modal hidden" id="createProjectModal" role="dialog" aria-modal="true" aria-labelledby="createProjectTitle">
+      <form class="export-card project-create-card" id="projectForm">
+        <button class="guidebook-close" id="closeCreateProject" type="button" aria-label="Close project form">&times;</button>
+        <p class="step-pill">New project</p><h2 id="createProjectTitle">Create a research project</h2>
+        <p class="muted">This context guides coding and theme development throughout the project.</p>
+        <label>Project name<input id="projectName" placeholder="e.g. Dementia care communication study" required /></label>
+        <label><span class="label-with-help">Research question<span class="help-tip" tabindex="0" aria-label="Identify initial codes related to {research_question}.">?</span></span><textarea id="researchQuestion" class="setup-textarea" placeholder="e.g. communication and coordination" required></textarea></label>
+        <label><span class="label-with-help">Interviewee<span class="help-tip" tabindex="0" aria-label="Your task is to code interviews or posts which were {interviewee}.">?</span></span><textarea id="interviewee" class="setup-textarea" placeholder="e.g. conducted with family caregivers of individuals with Alzheimer’s disease or related dementias" required></textarea></label>
+        <p class="project-create-error hidden" id="projectCreateError" role="alert" aria-live="assertive" tabindex="-1"></p>
+        <div class="project-modal-actions"><button class="secondary-btn" id="cancelCreateProject" type="button">Cancel</button><button class="primary-btn" id="createProjectBtn" type="submit">Create project</button></div>
+      </form>
+    </div>
+
+    <div class="export-modal hidden" id="openThemesConfirmModal" role="alertdialog" aria-modal="true" aria-labelledby="openThemesConfirmTitle" aria-describedby="openThemesConfirmDescription">
+      <div class="export-card themes-confirm-card">
+        <div class="themes-confirm-icon" aria-hidden="true">✓</div>
+        <h2 id="openThemesConfirmTitle">Open Themes with current coding?</h2>
+        <p id="openThemesConfirmDescription">Themes will use the finished coding results from all <strong id="openThemesTranscriptCount">0</strong> project transcripts.</p>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="cancelOpenThemes" type="button">Cancel</button>
+          <button class="primary-btn" id="confirmOpenThemes" type="button">Open Themes now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="codebookProcessingModal" role="dialog" aria-live="polite" aria-modal="true" aria-labelledby="codebookProcessingTitle" aria-describedby="codebookProcessingDescription">
+      <div class="export-card themes-confirm-card codebook-processing-card">
+        <div class="codebook-processing-spinner" aria-hidden="true"></div>
+        <p class="step-pill">Codebook review</p>
+        <h2 id="codebookProcessingTitle">Your codebook is being prepared</h2>
+        <p id="codebookProcessingDescription">We’re creating or updating your project codebook with the latest finished coding. This may take a few minutes. The updated codebook will open when it is ready.</p>
+        <div class="themes-confirm-notice">
+          <strong>Your existing codebook has not been lost</strong>
+          <span>Please wait for this update to finish so you do not review an older version.</span>
+        </div>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="closeCodebookProcessing" type="button">Close</button>
+          <button class="primary-btn" id="checkCodebookProcessing" type="button">Check again</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="export-modal hidden" id="codebookResearchQuestionModal" role="dialog" aria-modal="true" aria-labelledby="codebookResearchQuestionTitle">
+      <div class="export-card codebook-question-card">
+        <div id="codebookResearchQuestionChoice">
+          <p class="step-pill">Before opening the Codebook</p>
+          <h2 id="codebookResearchQuestionTitle">Would you like to refine your previously defined research question?</h2>
+          <div class="codebook-question-preview">
+            <span>Previous research question</span>
+            <blockquote id="previousResearchQuestionText">Your research question will appear here.</blockquote>
+          </div>
+          <div class="codebook-question-actions">
+            <button class="secondary-btn" id="skipResearchQuestionRefinement" type="button"><span>No</span></button>
+            <button class="secondary-btn" id="startResearchQuestionRefinement" type="button"><span>Yes</span></button>
+          </div>
+        </div>
+        <form class="hidden" id="codebookResearchQuestionForm">
+          <p class="step-pill">Refine the question</p>
+          <h2>Enter your refined research question</h2>
+          <p>AI will use this version only to identify Codebook entries that may not help answer it.</p>
+          <div class="codebook-question-preview compact">
+            <span>Previous research question</span>
+            <blockquote id="previousResearchQuestionFormText">Your research question will appear here.</blockquote>
+          </div>
+          <label for="refinedResearchQuestion">Refined research question</label>
+          <textarea id="refinedResearchQuestion" class="setup-textarea" placeholder="Enter the refined research question" required></textarea>
+          <div class="project-modal-actions">
+            <button class="secondary-btn" id="backToResearchQuestionChoice" type="button">Back</button>
+            <button class="primary-btn" type="submit">Use refined question</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="sourceCodeEditConfirmModal" role="alertdialog" aria-modal="true" aria-labelledby="sourceCodeEditConfirmTitle" aria-describedby="sourceCodeEditConfirmDescription">
+      <div class="export-card source-code-edit-confirm-card">
+        <div class="source-code-edit-confirm-icon" aria-hidden="true">i</div>
+        <h2 id="sourceCodeEditConfirmTitle">Revise an original transcript code?</h2>
+        <p id="sourceCodeEditConfirmDescription">This will open the source code in its original transcript.</p>
+        <div class="themes-confirm-notice source-code-edit-confirm-notice">
+          <strong>Your codebook will stay in place</strong>
+          <span>When you return, changes to this transcript code and its excerpts will be synchronized into the linked codebook entry. Existing codebook merges, splits, and other manual refinements will be preserved.</span>
+        </div>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="cancelSourceCodeEdit" type="button">Cancel</button>
+          <button class="primary-btn" id="confirmSourceCodeEdit" type="button">Continue to transcript</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="humanExportChoiceModal" role="dialog" aria-modal="true" aria-labelledby="humanExportChoiceTitle" aria-describedby="humanExportChoiceDescription">
+      <div class="export-card themes-confirm-card">
+        <div class="themes-confirm-icon" aria-hidden="true">✓</div>
+        <h2 id="humanExportChoiceTitle">Continue to AI Coding?</h2>
+        <p id="humanExportChoiceDescription">Human Coding is finished and saved.</p>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="stayOnHumanCodesBtn" type="button">Stay in Human Coding</button>
+          <button class="primary-btn" id="openAiCodesAfterHumanExportBtn" type="button">Continue to AI Coding</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="deleteProjectModal" role="dialog" aria-modal="true" aria-labelledby="deleteProjectTitle" aria-describedby="deleteProjectDescription">
+      <div class="export-card delete-project-card">
+        <div class="delete-project-icon" aria-hidden="true">!</div>
+        <h2 id="deleteProjectTitle">Delete project?</h2>
+        <p id="deleteProjectDescription">This action cannot be undone.</p>
+        <div class="delete-project-summary" id="deleteProjectSummary"></div>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="cancelDeleteProject" type="button">Cancel</button>
+          <button class="danger-btn" id="confirmDeleteProject" type="button">Delete project</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="deleteTranscriptModal" role="dialog" aria-modal="true" aria-labelledby="deleteTranscriptTitle" aria-describedby="deleteTranscriptDescription">
+      <div class="export-card delete-project-card">
+        <div class="delete-project-icon" aria-hidden="true">!</div>
+        <h2 id="deleteTranscriptTitle">Delete transcript?</h2>
+        <p id="deleteTranscriptDescription">This action cannot be undone.</p>
+        <div class="delete-project-summary" id="deleteTranscriptSummary"></div>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="cancelDeleteTranscript" type="button">Cancel</button>
+          <button class="danger-btn" id="confirmDeleteTranscript" type="button">Delete transcript</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-modal hidden" id="clearTranscriptModal" role="dialog" aria-modal="true" aria-labelledby="clearTranscriptTitle" aria-describedby="clearTranscriptDescription">
+      <div class="export-card delete-project-card">
+        <div class="delete-project-icon" aria-hidden="true">!</div>
+        <h2 id="clearTranscriptTitle">Clear transcript codes?</h2>
+        <p id="clearTranscriptDescription">The uploaded transcript will be kept.</p>
+        <div class="delete-project-summary" id="clearTranscriptSummary"></div>
+        <div class="project-modal-actions">
+          <button class="secondary-btn" id="cancelClearTranscript" type="button">Cancel</button>
+          <button class="danger-btn" id="confirmClearTranscript" type="button">Clear codes</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="workspace hidden" data-view="workspace">
+      <header class="topbar">
+        <button class="logo-lockup app-home-link" type="button" data-app-home aria-label="Go to ReflexCoTI home">
+          <span class="brand-mark small">R</span>
+          <strong>ReflexCoTI</strong>
+        </button>
+        <button class="workspace-project-name" id="workspaceProjectLink" type="button" aria-label="Return to project page">
+          <span>Project</span>
+          <strong id="workspaceProjectName">Untitled project</strong>
+        </button>
+        <div class="top-spacer"></div>
+        <nav class="top-tabs"><button class="active" type="button">Dashboard</button></nav>
+        <span class="readonly-session-badge hidden" id="piReadOnlyWorkspaceBadge">Senior researcher read-only view</span>
+        <div class="avatar" id="userAvatar">U</div>
+      </header>
+
+      <div class="main-grid">
+        <aside class="sidebar">
+          <nav>
+            <button data-project-settings type="button">Transcripts</button>
+            <button data-workspace-nav="codes" data-coding-workspace-mode="human" type="button">Human Coding</button>
+            <button class="active" data-workspace-nav="codes" data-coding-workspace-mode="ai" type="button">AI Coding</button>
+            <button data-workspace-nav="themes" data-theme-workspace-mode="codebook" type="button">Codebook</button>
+            <button data-workspace-nav="themes" data-theme-workspace-mode="human" type="button" disabled>Human Themes</button>
+            <button data-workspace-nav="themes" data-theme-workspace-mode="ai" type="button" disabled>AI Themes</button>
+          </nav>
+          <button class="study-guide" id="guidebookBtn" type="button">? Help Center</button>
+        </aside>
+
+        <main class="editor-grid">
+          <div class="codebook-return-bar hidden" id="codebookReturnBar" role="status">
+            <span><strong>Source-code editing</strong><small id="codebookReturnDetail">Return anytime to synchronize changes into the existing codebook.</small></span>
+            <button class="primary-btn" id="returnToCodebookBtn" type="button">Return to codebook</button>
+          </div>
+          <section class="panel transcript-panel" data-workspace-page="codes">
+            <div class="panel-title">
+              <h2>Transcript</h2>
+            </div>
+            <div class="upload-card">
+              <div>
+                <strong>Project transcript</strong>
+                <p>Coding workspace for the transcript chosen in the Transcript Section.</p>
+                <span id="uploadedTranscriptName">Preparing project transcript...</span>
+              </div>
+              <div class="workspace-active-transcript">
+                <span>Selected transcript</span>
+                <div><strong id="activeTranscriptName">Preparing transcript...</strong><button class="text-btn" id="changeTranscriptBtn" type="button">Change</button></div>
+              </div>
+              <select id="activeTranscriptSelect" class="hidden" aria-hidden="true" tabindex="-1"></select>
+              <div class="identify-control">
+                <button class="primary-btn identify-action" id="identifyCodesBottom" type="button" disabled>AI coding starts automatically</button>
+                <span id="readingGateStatus" role="status" aria-live="polite">Choose a project transcript first.</span>
+              </div>
+            </div>
+            <div class="search-box">
+              <input id="transcriptSearch" placeholder="Search transcript..." />
+              <button type="button">=</button>
+            </div>
+            <div class="transcript-lines" id="transcriptLines"></div>
+          </section>
+
+          <div class="coding-pane-resizer" id="codingPaneResizer" role="separator" aria-label="Resize transcript and coding panels" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" tabindex="0" title="Drag to resize. Double-click to reset."><span aria-hidden="true"></span></div>
+
+          <section class="panel code-panel" data-workspace-page="codes">
+            <div class="toolbar-title ai-code-only">
+              <div class="panel-title">
+                <h2>AI Coding <span id="codeCount">(0)</span></h2>
+                <small id="codeReviewSummary" aria-live="polite">0 reviewed · 0 remaining</small>
+              </div>
+            </div>
+            <div class="manual-coding-panel hidden" id="manualCodingPanel">
+              <div class="manual-coding-heading">
+                <div><span class="optional-workflow-badge">Optional</span><strong>Human Coding</strong></div>
+                <p class="hidden" id="manualSelectionStatus" aria-live="polite"></p>
+              </div>
+              <div class="human-manual-list" id="humanManualCodeList"></div>
+              <div class="manual-workflow-completion"><button class="primary-btn manual-coding-done" id="finishHumanCodingBtn" type="button" disabled>Finish</button><button class="secondary-btn" id="exportHumanCodingBtn" type="button" disabled>Export</button></div>
+              <div class="human-reopen-add hidden" id="humanReopenAdd"><button class="secondary-btn" id="addHumanCodeAfterFinishBtn" type="button">Add code</button></div>
+            </div>
+            <div class="code-workflow-scroll ai-code-only">
+              <div class="code-list" id="codeList"></div>
+              <div id="mergeCodeEditor"></div>
+            </div>
+            <div class="new-code-gate ai-code-only" id="newCodeGate">
+              <div class="human-code-option-heading">
+                <span class="human-code-step">+</span>
+                <span>
+                  <strong>Add additional codes</strong>
+                  <small id="newCodeStatus">Review all AI codes before adding an additional code.</small>
+                </span>
+              </div>
+              <button class="secondary-btn" id="newCodeBtn" type="button">+ Add a code</button>
+              <button class="primary-btn" id="finishAddingHumanCodesBtn" type="button">Finish adding codes</button>
+            </div>
+            <div class="ai-code-only" id="newCodeEditor"></div>
+          </section>
+
+          <section class="panel themes-panel hidden" data-workspace-page="themes">
+            <div class="themes-workspace-headings">
+              <div class="panel-title" id="themePanelTitle">
+                <h2><span id="themePageTitle">Codebook</span> <span class="optional-workflow-badge hidden" id="themeOptionalBadge">Optional</span> <span id="themeCount">(0)</span></h2>
+              </div>
+              <div class="themes-column-heading themes-review-heading">
+                <div><strong id="themeReviewColumnHeading">AI Themes<span class="theme-review-heading-summary" id="themeReviewHeadingSummary"></span></strong><span>Generate and review AI candidate themes.</span></div>
+              </div>
+            </div>
+            <div class="themes-workspace-split">
+              <aside class="themes-codebook-column" aria-label="Codebook and human theme tools">
+                <div class="themes-column-heading">
+                  <div><strong id="themeCodebookColumnTitle">Codebook</strong><span id="themeCodebookColumnDescription">Review the cumulative codebook built as transcript coding was finished before developing themes.</span></div>
+                </div>
+                <div class="upload-card themes-upload-card" id="themeCodebookSetupCard">
+                  <div>
+                    <span id="themeUploadStatus">Add at least two project transcripts to begin.</span>
+                  </div>
+                  <input id="themeJsonFiles" class="hidden" type="file" accept=".json,application/json" multiple />
+                  <div class="button-stack">
+                    <button class="secondary-btn" id="generateCodebookBtn" type="button" disabled>Generate codebook</button>
+                    <span id="codebookUploadHint">Add transcripts with saved coding results.</span>
+                  </div>
+                </div>
+                <div class="codebook-panel hidden" id="codebookPanel">
+                  <div id="codebookContent">
+                    <article class="empty-state"><strong>No codebook yet</strong><p>Code at least two project transcripts, then generate the codebook.</p></article>
+                  </div>
+                  <div class="codebook-actions">
+                    <button class="primary-btn hidden" id="finishCodebookReviewBtn" type="button" disabled>Finish codebook review</button>
+                  </div>
+                </div>
+                <div class="theme-path-choice hidden" id="themePathChoice">
+                  <div>
+                    <span class="optional-workflow-badge">Codebook complete</span>
+                    <strong>How would you like to develop themes?</strong>
+                    <p>Human Themes is optional. You can record your own interpretation first, or go directly to AI theme generation.</p>
+                  </div>
+                  <div class="theme-path-actions">
+                    <button class="secondary-btn" id="openHumanThemesBtn" type="button"><span>Human Themes</span><small>Optional manual interpretation</small></button>
+                    <button class="primary-btn" id="openAiThemesBtn" type="button"><span>AI Themes</span><small>Generate and review suggestions</small></button>
+                  </div>
+                </div>
+              </aside>
+              <section class="manual-theme-panel hidden" id="manualThemePanel" aria-label="Create human themes">
+                <div class="manual-theme-intro">
+                  <span class="optional-workflow-badge">Optional</span>
+                  <strong id="manualThemePanelTitle">Create a human theme</strong>
+                  <p id="manualThemeIntroStatus">Select code names on the left, then name and describe your interpretation.</p>
+                </div>
+                <div class="human-manual-list" id="humanManualThemeList"></div>
+                <label>Theme name<input id="manualThemeName" placeholder="Enter theme name" disabled /></label>
+                <label>Description<textarea id="manualThemeDescription" placeholder="Describe this theme" disabled></textarea></label>
+                <label class="manual-theme-related-codes">Selected codes<textarea id="manualThemeSupport" placeholder="Select code names on the left or type one per line" disabled></textarea></label>
+                <div class="manual-theme-code-picker hidden" id="manualThemeCodePicker"></div>
+                <div class="manual-coding-actions">
+                  <button class="secondary-btn" id="clearManualThemeBtn" type="button" disabled>Clear</button>
+                  <button class="primary-btn" id="saveManualThemeBtn" type="button" disabled>Add human theme</button>
+                  <button class="primary-btn" id="finishHumanThemesBtn" type="button" disabled>Finish</button>
+                  <button class="secondary-btn" id="exportHumanThemesBtn" type="button" disabled>Export</button>
+                </div>
+              </section>
+              <section class="themes-review-column" aria-label="Theme review">
+                <div class="ai-theme-start-card" id="aiThemeStartCard">
+                  <div><strong>Generate AI themes</strong><p>Use the finished codebook to create AI candidate themes.</p></div>
+                  <button class="primary-btn" id="generateThemesBtn" type="button" disabled>Generate AI themes</button>
+                </div>
+                <div class="theme-review-toolbar"><span id="themeReviewStatus">Code at least two project transcripts to begin theme generation.</span></div>
+                <div class="theme-list" id="themeList"></div>
+                <div id="mergeThemeEditor"></div>
+              </section>
+            </div>
+          </section>
+
+        </main>
+      </div>
+
+      <div class="manual-code-popover hidden" id="manualCodePopover" role="dialog" aria-label="Add code to selected transcript text">
+        <div class="manual-code-popover-heading"><strong>Add a code</strong><span id="manualSelectionLine">Selected text</span></div>
+        <label for="manualCodeName">Code name</label>
+        <input id="manualCodeName" placeholder="Enter a concise code name" disabled />
+        <div class="manual-code-popover-actions"><button class="text-btn" id="clearManualSelectionBtn" type="button" disabled>Cancel</button><button class="primary-btn" id="saveManualCodeBtn" type="button" disabled>Add code</button></div>
+      </div>
+
+      <footer class="statusbar">
+        <span id="wordStats">Words: 0</span>
+        <span id="codeStats">Codes: 0</span>
+        <span id="lastSaved">Last saved: Not yet</span>
+      </footer>
+    </section>
+
+    <div class="guidebook-modal hidden" id="guidebookModal" role="dialog" aria-modal="true" aria-labelledby="guidebookTitle">
+      <section class="guidebook-card">
+        <header class="guidebook-header">
+          <div>
+            <p class="step-pill">Help Center</p>
+            <h2 id="guidebookTitle">What you can do in ReflexCoTI</h2>
+            <p class="muted">Explore the tools available for coding transcripts and developing themes.</p>
+          </div>
+          <button class="guidebook-close" id="closeGuidebook" type="button" aria-label="Close help center">&times;</button>
+        </header>
+
+        <div class="guidebook-content">
+          <section class="guidebook-section guidebook-video-section" aria-labelledby="guidebookVideoTitle">
+            <div class="guidebook-video-heading">
+              <div>
+                <h3 id="guidebookVideoTitle">Watch the ReflexCoTI tutorial</h3>
+                <p>Follow the complete workflow from project creation and transcript upload through coding, codebook review, and theme development.</p>
+              </div>
+              <div class="guidebook-video-actions">
+                <span>9:20</span>
+                <a href="https://youtu.be/TCwG5zCv0Us" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+            <div class="guidebook-video">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/TCwG5zCv0Us"
+                title="ReflexCoTI step-by-step tutorial"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Create research projects</h3>
+            <p>Set up a project with your research question, add transcripts, and keep your study materials organized in one workspace.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Code transcripts </h3>
+            <p>Highlight transcript excerpts and create your own codes, or use AI coder agents to generate suggested codes and supporting excerpts.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Review and refine AI codes</h3>
+            <p>Inspect each AI-suggest codes. Accept, revise, merge, split, reject, or add additional codes so the results reflect your interpretation.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Build a codebook</h3>
+            <p>Bring reviewed codes from multiple transcripts into one codebook. Revise the codebook if necessary.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Generate themes</h3>
+            <p>Create themes manually or generate AI theme suggestions from the finished codebook. Connect themes to relevant codes.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Review and refine AI themes</h3>
+            <p>Accept, revise, merge, split, or reject suggested themes. You can add additional themes so the results reflect your interpretation.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Collaborate with your research team</h3>
+            <p>Invite researchers and share suggestions.</p>
+          </section>
+
+          <section class="guidebook-section">
+            <h3>Export your work</h3>
+            <p>Export your human coding, reviewed AI coding, and project themes for use in your research workflow.</p>
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <div class="export-modal hidden" id="agentProfileModal" role="dialog" aria-modal="true" aria-labelledby="agentProfileTitle">
+      <section class="export-card agent-profile-card">
+        <button class="guidebook-close agent-profile-close" id="closeAgentProfile" type="button" aria-label="Close coder agent profile">&times;</button>
+        <p class="step-pill">Coder Agent</p>
+        <h2 id="agentProfileTitle">Coder agent</h2>
+        <div class="agent-profile-content">
+          <div>
+            <strong>Coder Agent Name</strong>
+            <p id="agentProfileName"></p>
+          </div>
+          <div>
+            <strong>Identity Profile</strong>
+            <ul id="agentProfileIdentity"></ul>
+          </div>
+          <div>
+            <strong>Initial Reflexive Assumption</strong>
+            <p id="agentProfileAssumptions"></p>
+          </div>
+          <div>
+            <strong>Assumptions Used in Final Coding Round</strong>
+            <div id="agentProfileUpdatedAssumptions"></div>
+          </div>
+          <div>
+            <strong>Reflexive History Used in Final Coding Round</strong>
+            <div id="agentProfileReflexiveHistory"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="codebook-explorer-modal hidden" id="codebookExplorerModal" role="dialog" aria-modal="true" aria-labelledby="codebookExplorerTitle">
+      <section class="codebook-explorer-card">
+        <header class="codebook-explorer-header">
+          <div>
+            <p class="step-pill">Codebook visualization</p>
+            <h2 id="codebookExplorerTitle">Codebook Explorer</h2>
+            <p>See how the generated codebook is distributed across codes, transcripts, and excerpts.</p>
+          </div>
+          <button class="guidebook-close" id="closeCodebookExplorer" type="button" aria-label="Close Codebook Explorer">&times;</button>
+        </header>
+        <div id="codebookExplorerContent"></div>
+      </section>
+    </div>
+
+    <div class="export-modal hidden" id="exportPromptModal" role="dialog" aria-modal="true" aria-labelledby="exportPromptTitle">
+      <section class="export-card">
+        <h2 id="exportPromptTitle">Export complete</h2>
+        <p id="exportPromptMessage">Your reviewed coding file, original AI coding file, and human version file have been prepared. Would you like to move to the next transcript?</p>
+        <div class="export-prompt-actions">
+          <button class="secondary-btn" id="stayOnTranscriptBtn" type="button">Stay here</button>
+          <button class="primary-btn" id="nextTranscriptBtn" type="button">Start next transcript</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="export-modal ai-code-caution-modal hidden" id="aiCodeCautionModal" role="alertdialog" aria-modal="true" aria-labelledby="aiCodeCautionTitle" aria-describedby="aiCodeCautionMessage">
+      <section class="export-card ai-code-caution-card">
+        <div class="ai-code-caution-icon" aria-hidden="true">🚩</div>
+        <h2 id="aiCodeCautionTitle">Pause and review carefully</h2>
+        <p id="aiCodeCautionMessage">AI-generated codes can be incomplete or misleading. Review the next code and its supporting excerpts critically before making your decision.</p>
+        <div class="export-prompt-actions">
+          <button class="danger-btn" id="continueCodeReviewBtn" type="button">Continue reviewing</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="export-modal hidden" id="codingQuestionnaireModal" role="dialog" aria-modal="true" aria-labelledby="codingQuestionnaireTitle">
+      <form class="export-card questionnaire-card" id="codingQuestionnaireForm">
+        <h2 id="codingQuestionnaireTitle">AI coding experience</h2>
+        <p>Please rate your experience with the AI coding suggestions before finishing. Scale: 1 = strongly disagree, 5 = strongly agree. Active response time is recorded from first focus or interaction to answer.</p>
+        <div class="questionnaire-list" id="codingQuestionnaireList"></div>
+        <div class="export-prompt-actions">
+          <button class="secondary-btn" id="cancelCodingQuestionnaire" type="button">Cancel</button>
+          <button class="primary-btn" type="submit">Finish</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="export-modal hidden" id="themeQuestionnaireModal" role="dialog" aria-modal="true" aria-labelledby="themeQuestionnaireTitle">
+      <form class="export-card questionnaire-card" id="themeQuestionnaireForm">
+        <h2 id="themeQuestionnaireTitle">AI theme generation experience</h2>
+        <p>Please rate your experience with the AI theme suggestions before finishing. Scale: 1 = strongly disagree, 5 = strongly agree. Active response time is recorded from first focus or interaction to answer.</p>
+        <div class="questionnaire-list" id="themeQuestionnaireList"></div>
+        <div class="export-prompt-actions">
+          <button class="secondary-btn" id="cancelThemeQuestionnaire" type="button">Cancel</button>
+          <button class="primary-btn" type="submit">Finish</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="app.js?v=20261014-1"></script>
+  </body>
+</html>
