@@ -1,11 +1,6 @@
 import json, re, os
 import numpy as np
-from nltk.tokenize import word_tokenize
-
-try:
-    import pandas as pd
-except Exception:
-    pd = None
+import pandas as pd
 
 def _chunk_sort_key(filename):
     m = re.search(r"_chunk_(\d+)", filename)
@@ -198,106 +193,6 @@ def extract_text_from_clue_pool_file_with_score_filter(fp, min_average_score, sc
         kept_texts.append(txt)
 
     return "\n".join(kept_texts)
-
-
-_PUNCT_ONLY = re.compile(r"^\W+$") 
-
-def tokenize_for_eval(text: str):
-    tokens = word_tokenize((text or "").lower())
-    tokens = [t for t in tokens if not _PUNCT_ONLY.match(t)]  
-    return set(tokens)
-
-def compute_jaccard(model_text, human_text):
-    model_tokens = tokenize_for_eval(model_text)
-    human_tokens = tokenize_for_eval(human_text)
-    
-    intersection = model_tokens.intersection(human_tokens)
-    union = model_tokens.union(human_tokens)
-    
-    return len(intersection) / len(union) if union else 0
-
-def compute_jaccard_for_all(model_dict, human_dict):
-    scores = {}
-    for name, model_text in model_dict.items():
-        human_text = human_dict.get(name, "")
-        score = compute_jaccard(model_text, human_text)
-        scores[name] = score
-    return scores
-
-def average_jaccard(jaccard_scores):
-    if jaccard_scores:
-        return sum(jaccard_scores.values()) / len(jaccard_scores)
-    return 0
-
-def compute_token_metrics(model_text, human_text):
-    model_tokens = tokenize_for_eval(model_text)
-    human_tokens = tokenize_for_eval(human_text)
-    intersection = model_tokens.intersection(human_tokens)
-    precision = len(intersection) / len(model_tokens) if model_tokens else 0
-    recall = len(intersection) / len(human_tokens) if human_tokens else 0
-    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-    return precision, recall, f1
-
-def compute_token_metrics_for_all(model_dict, human_dict):
-    results = {}
-    for name, model_text in model_dict.items():
-        human_text = human_dict.get(name, "")
-        precision, recall, f1 = compute_token_metrics(model_text, human_text)
-        results[name] = {
-            "precision": precision,
-            "recall": recall,
-            "f1": f1
-        }
-    return results
-
-def average_token_metrics(token_metrics):
-    precisions = [m["precision"] for m in token_metrics.values()]
-    recalls = [m["recall"] for m in token_metrics.values()]
-    f1s = [m["f1"] for m in token_metrics.values()]
-
-    avg_precision = sum(precisions) / len(precisions) if precisions else 0
-    avg_recall = sum(recalls) / len(recalls) if recalls else 0
-    avg_f1 = sum(f1s) / len(f1s) if f1s else 0
-
-    return {
-        "average_precision": avg_precision,
-        "average_recall": avg_recall,
-        "average_f1": avg_f1
-    }
-
-def compute_all_metrics(model_dict, human_dict):
-    """Compute Jaccard, Precision, Recall, F1 for each shared key and return as a pandas DataFrame with average row."""
-    if pd is None:
-        raise ImportError("pandas is required for compute_all_metrics, but it is not installed.")
-    # --- Individual metrics ---
-    jaccard_scores = compute_jaccard_for_all(model_dict, human_dict)
-    token_metrics = compute_token_metrics_for_all(model_dict, human_dict)
-
-    # --- Combine results for shared keys only ---
-    shared_keys = set(model_dict.keys()) & set(human_dict.keys())
-    data = []
-
-    for name in sorted(shared_keys):
-        data.append({
-            "Interview": name,
-            "Jaccard": jaccard_scores.get(name, 0),
-            "Precision": token_metrics.get(name, {}).get("precision", 0),
-            "Recall": token_metrics.get(name, {}).get("recall", 0),
-            "F1": token_metrics.get(name, {}).get("f1", 0)
-        })
-
-    df = pd.DataFrame(data)
-
-    avg_row = {
-        "Interview": "Average",
-        "Jaccard": df["Jaccard"].mean() if not df.empty else 0,
-        "Precision": df["Precision"].mean() if not df.empty else 0,
-        "Recall": df["Recall"].mean() if not df.empty else 0,
-        "F1": df["F1"].mean() if not df.empty else 0
-    }
-    df = pd.concat([df, pd.DataFrame([avg_row])], ignore_index=True)
-
-    return df
 
 # clean markdown text and json text
 MARKDOWN_PATTERNS = [
