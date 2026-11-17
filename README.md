@@ -20,18 +20,9 @@ cd ReflexCoTI-AI-Copilot-Reflexive-Thematics-Analysis
 
 ### 3. Set up the Python environment
 
-**macOS / Linux:**
-
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-```
-
-**Windows:**
-
-```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
 ```
 
 ### 4. Install dependencies
@@ -44,18 +35,8 @@ python -m nltk.downloader punkt punkt_tab
 
 ### 5. Launch ReflexCoTI
 
-**macOS / Linux:**
-
 ```bash
-HOST=127.0.0.1 PORT=5173 python server.py
-```
-
-**Windows (PowerShell):**
-
-```powershell
-$env:HOST = "127.0.0.1"
-$env:PORT = "5173"
-python server.py
+./start_reflexcoti.sh
 ```
 
 Open the application in your browser:
