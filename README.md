@@ -1,6 +1,7 @@
 # ReflexCoTI: AI Copilot for Reflexive Thematic Analysis
 
 ReflexCoTI is a web-based AI copilot designed to support reflexive thematic analysis (RTA). Researchers can conduct manual thematic analysis or review and refine AI-generated suggestions for coding and theme development.
+<img width="1096" height="640" alt="NAACL study overview drawio (3)" src="https://github.com/user-attachments/assets/1f94cd2e-6a78-4146-bf8b-507d67219488" />
 
 ## Run Locally with Python
 
