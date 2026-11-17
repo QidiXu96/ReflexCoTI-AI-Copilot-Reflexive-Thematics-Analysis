@@ -7,7 +7,7 @@ ReflexCoTI is a web-based AI copilot designed to support reflexive thematic anal
 
 ### 1. Requirements
 
-- Python 3.12
+- Python 3.1
 - Git
 - Internet connection for installing dependencies
 - Azure OpenAI access
@@ -39,7 +39,6 @@ python -m nltk.downloader punkt punkt_tab
 ```bash
 ./start_reflexcoti.sh
 ```
-
 Open the application in your browser:
 
 **http://127.0.0.1:5173**
