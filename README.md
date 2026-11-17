@@ -37,11 +37,11 @@ python -m nltk.downloader punkt punkt_tab
 ### 5. Launch ReflexCoTI
 
 ```bash
-./start_reflexcoti.sh
+PORT=5174 HOST=127.0.0.1 ./start_reflexcoti.sh
 ```
 Open the application in your browser:
 
-**http://127.0.0.1:5173**
+**http://127.0.0.1:5174**
 
 Keep the terminal running while using the application. Press `Ctrl+C` to stop the server.
 
