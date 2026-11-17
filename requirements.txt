@@ -1,6 +1,5 @@
 # Direct runtime dependencies. PyTorch is installed as a CPU-only wheel in
 # the Dockerfile before this file is installed.
-nltk==3.10.0
 numpy==2.5.1
 openai==2.45.0
 pandas==3.0.3
