@@ -54,6 +54,11 @@ To use AI-assisted coding and theme generation, enter your Azure OpenAI credenti
 - API version
 - Model deployment name
 
+## Installable Package
+If you are not familiar with Python, you can download ReflexCoTI APP package and open it in your default browser.
+**https://drive.google.com/file/d/1FCT8M4X4EopEx9WkNoz9Zxofkq9LEz8F/view?usp=sharing**
+If you are from UTHealth, you can open ReflexCoTI website via UTHealth VPN at **http://129.106.31.45:7783**
+
 ## Local Data and Privacy
 
 ReflexCoTI stores local projects, uploaded transcripts, and analysis results in the `server_data/` directory, which is excluded from GitHub through `.gitignore`.
