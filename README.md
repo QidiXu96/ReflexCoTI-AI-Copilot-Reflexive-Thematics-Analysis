@@ -58,11 +58,9 @@ To use AI-assisted coding and theme generation, enter your Azure OpenAI credenti
 If you are not familiar with Python, you can download ReflexCoTI APP package and open it in your default browser.
 **https://drive.google.com/file/d/1FCT8M4X4EopEx9WkNoz9Zxofkq9LEz8F/view?usp=sharing**
 
-## Local Data and Privacy
+## Local Data
 
 ReflexCoTI stores local projects, uploaded transcripts, and analysis results in the `server_data/` directory, which is excluded from GitHub through `.gitignore`.
-
-Do not upload API keys, confidential transcripts, or protected health information to public repositories.
 
 
 This project is released under the MIT License. See [LICENSE](LICENSE).
